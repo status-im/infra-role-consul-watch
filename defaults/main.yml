@@ -1,0 +1,4 @@
+---
+consul_watch_config_file: 'watch_{{ consul_watch_name | mandatory | regex_replace("[:.,-/]", "_") }}.json'
+consul_default_watch_disabled: false
+consul_watches: []

@@ -1,0 +1,32 @@
+---
+- name: 'Create consul directory'
+  file:
+    path:  '/etc/consul'
+    group: 'consul'
+    state: 'directory'
+    mode:  0755
+
+- name: Get Consul datacenters
+  command: consul catalog datacenters
+  register: consul_dc_output
+  changed_when: false
+
+- name: 'Generate watch config'
+  template:
+    dest: '/etc/consul/{{ consul_watch_config_file }}'
+    src: 'watch.json.j2'
+    trim_blocks: false
+    owner: 'root'
+    group: 'consul'
+    mode: 0640
+  register: consul_config
+
+- name: 'Validate JSON syntax'
+  command: 'jq . "/etc/consul/{{ consul_watch_config_file }}"'
+  changed_when: false
+
+- name: Reload consul
+  service:
+    name: 'consul'
+    state: 'reloaded'
+  when: consul_config.changed

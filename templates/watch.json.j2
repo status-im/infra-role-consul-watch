@@ -1,0 +1,14 @@
+{
+  "watches": [
+    {%- for watch in consul_watches %}
+      {%- for dc in consul_dc_output.stdout_lines %}
+      {
+        "type": "{{ watch.type }}",
+        "args": {{ watch.args | to_json }},
+        "datacenter": "{{ dc }}"
+      }
+      {%- if not loop.last %},{% endif %}
+      {%- endfor %}
+    {%- endfor %}
+  ]
+}

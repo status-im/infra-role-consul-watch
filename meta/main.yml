@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Jakub Sokolowski <jakub@status.im>
+  description: Create the configuration file for a consul watch
+  company: Status.im
+  license: MIT
+  min_ansible_version: 1.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+    - name: Windows
+      versions:
+        - all
+dependencies: []
