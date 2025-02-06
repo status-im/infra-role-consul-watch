@@ -1,0 +1,27 @@
+---
+- name: 'Create consul directory'
+  win_file:
+    path: 'C:/consul/config'
+    state: directory
+
+- name: Get Consul datacenters
+  command: consul catalog datacenters
+  register: consul_dc_output
+  changed_when: false
+
+- name: 'Generate watch config'
+  win_template:
+    dest: 'C:/consul/config/{{ consul_watch_config_file }}'
+    src: 'watch.json.j2'
+    trim_blocks: false
+  register: consul_config
+
+- name: 'Validate JSON syntax'
+  win_shell: 'jq . "C:/consul/config/{{ consul_watch_config_file }}"'
+  changed_when: false
+
+- name: Restart consul
+  win_service:
+    name: 'consul'
+    state: 'restarted'
+  when: consul_config.changed
