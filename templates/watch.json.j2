@@ -1,7 +1,7 @@
 {
   "watches": [
     {%- for watch in consul_watches %}
-      {%- for dc in consul_dc_output.stdout_lines %}
+      {%- for dc in (consul_dc_output.stdout_lines | sort) %}
       {
         "type": "{{ watch.type }}",
         "args": {{ watch.args | to_json }},
